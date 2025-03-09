@@ -22,20 +22,25 @@ struct ContentView: View {
     }
 }
 struct CardView: View{
-    var isFaceUp: Bool = false
+    @State var isFaceUp: Bool = false // default state
+    // every struct needs to be valued
+    
     var body: some View {
         ZStack {
+            let base: RoundedRectangle = RoundedRectangle(cornerRadius: 12)
+            //let means it's a constant
             if isFaceUp{
-                RoundedRectangle(cornerRadius:12)
-                    .foregroundColor(.white)
-                RoundedRectangle(cornerRadius:12)
-                    .strokeBorder(style: StrokeStyle(lineWidth:2))
+                base.fill(.white)
+                base.strokeBorder(lineWidth: 2)
                 Text("HelloPiyan")
                     .font(.largeTitle)
             }
             else{
-                RoundedRectangle(cornerRadius:12)
+                base.fill()
             }
+        }
+        .onTapGesture{
+            isFaceUp.toggle()
         }
     }
 }

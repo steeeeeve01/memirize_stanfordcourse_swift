@@ -9,12 +9,18 @@ import SwiftUI
 
 struct ContentView: View {
     //this ContentView behaves like a view
-    let emojis: Array<String> = ["👻","😘","😈","🫥","🙄"]
+    @State var emojis: Array<String> = ["👻","😘","😈","🫥","👩🏾‍🦳","👻","😘","😈","🫥","👩🏾‍🦳"]
+    let theme1: Array<String> = ["👻","😘","😈","🫥","👩🏾‍🦳","👻","😘","😈","🫥","👩🏾‍🦳"]
+    let theme2: Array<String> = ["⚽️","🏀","🏈","⚾️","🏐","⚽️","🏀","🏈","⚾️","🏐"]
+    let theme3: Array<String> = ["🍇","🍈","🍉","🍊","🍋","🍋‍🟩","🍌","🍍","🥭","🍎"]
+    @State var themechoose: Int = 1
     //Array<String> could also be written as [Array]
     @State var cardCount: Int = 4
     var body: some View {
         //run consecutively when getting asked.
         VStack{
+            Title
+            themeAdjusters
             ScrollView{
                 cards
             }
@@ -22,6 +28,49 @@ struct ContentView: View {
             
         }.padding()
     }
+    var Title: some View{
+        Text("Memorize!")
+            .font(.largeTitle)
+            .foregroundColor(.blue)
+    }
+    
+    var themeAdjusters: some View{
+        HStack{
+            themer1
+            Spacer()
+            themer2
+            Spacer()
+            themer3
+        }
+        .imageScale(.large)
+        .font(.largeTitle)
+    }
+    func themeAdjuster(by themer:Int,symbol:String)-> some View{
+        Button(action:{
+            if (themer == 1){
+                emojis = theme1
+            }
+            else if (themer == 2){
+                emojis = theme2
+            }
+            else{
+                emojis = theme3
+            }
+        },label:{
+            Image(systemName: symbol)
+        })
+    }
+    var themer1: some View{
+        themeAdjuster(by:1, symbol:"1.lane")
+    }
+    var themer2: some View{
+        themeAdjuster(by:2, symbol:"2.lane")
+    }
+    var themer3: some View{
+        themeAdjuster(by:3, symbol:"3.lane")
+    }
+    
+
     var cards: some View{
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))]) {
             ForEach(0..<cardCount, id:\.self){ index in
@@ -44,7 +93,7 @@ struct ContentView: View {
             cardCount += offset
         }, label:{
             Image(systemName: symbol)
-        }).disabled(cardCount + offset < 1 || cardCount + offset > emojis.count)
+        }).disabled(cardCount + offset < 4 || cardCount + offset > emojis.count)
     }
     var cardAdder: some View{
             cardCountAdjuster(by: +1, symbol: "rectangle.stack.badge.plus.fill")
@@ -53,6 +102,8 @@ struct ContentView: View {
             cardCountAdjuster(by: -1, symbol: "rectangle.stack.badge.minus.fill")
     }
 }
+
+
 struct CardView: View{
     let content: String
     @State var isFaceUp: Bool = false // default state

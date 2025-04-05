@@ -8,12 +8,13 @@
 import SwiftUI
 // View Model is part of the UI
 class EmojiMemoryGame: ObservableObject {
-    static let emojis = ["👻","😘","😈","🫥","👩🏾‍🦳","👻","😘","😈","🫥","👩🏾‍🦳"]
+    private static let emojis =
+    ["👻","😘","😈","🫥","👩🏾‍🦳","🤡","👺","😢","💞","🧠"]
 
     @Published private var model = createMemoryGame()
-    //"@Published" informs when it's "gonna" change; primary way to announce the change
+    //"@Published" informs when it's "gonna" change; Primary way to announce the change
     private static func createMemoryGame() ->  MemoryGame<String>{
-        MemoryGame(numberOfPairsOfCards:10){ pairIndex in
+        MemoryGame(numberOfPairsOfCards: 10){ pairIndex in
             if emojis.indices.contains(pairIndex){
                 //to examine if the given index points to a emoji
                 return emojis[pairIndex]
@@ -31,6 +32,7 @@ class EmojiMemoryGame: ObservableObject {
         return model.cards
     }
     func choose (_ card: MemoryGame<String>.Card){ //to present user's intent, that's part of the ViewModel's role
+        objectWillChange.send()
         model.choose(card)
     }
 }
